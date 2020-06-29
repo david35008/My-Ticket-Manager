@@ -1,3 +1,6 @@
+/**
+ * @jest-environment node
+ */
 const puppeteer = require('puppeteer');
 const nock = require('nock');
 const useNock = require('nock-puppeteer');
@@ -81,6 +84,7 @@ describe(projectName, () => {
 
     await page.type('#searchInput', filterText);
     expect(getFilteredTicketsMock.isDone()).toBe(true)
+    await (new Promise((resolve) => setTimeout(resolve, 3000)));
     const elements = await page.$$('.ticket');
     expect(elements.length).toBe(1);
   });

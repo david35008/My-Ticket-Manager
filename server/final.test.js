@@ -1,4 +1,8 @@
+/**
+ * @jest-environment node
+ */
 const request = require('supertest');
+const full4s = require('@suvelocity/tester');
 const app = require('./app');
 const data = require('./data.json');
 
@@ -8,7 +12,7 @@ describe(projectName, () => {
     await full4s.beforeAll();
   });
   afterEach(async () => {
-    await full4s.afterEach(page);
+    await full4s.afterEach();
   })
   afterAll(async () => {
     await full4s.afterAll(projectName);

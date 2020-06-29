@@ -32,5 +32,5 @@ jobs:
       run: npm start & npx wait-on http://localhost:3000
       working-directory: ./client
     - name: Run Client Tests
-      run: USER_REPORT=${{ github.actor }} REPO_REPORT=${{ github.repository }} node_modules/.bin/jest
+      run: USER_REPORT=${{ github.actor }} REPO_REPORT=${{ github.repository }} npm run test -- --watchAll=false
       working-directory: ./client
