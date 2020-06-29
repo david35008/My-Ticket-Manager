@@ -33,11 +33,10 @@
     ]
   },
   "devDependencies": {
-    "gifencoder": "^2.0.1",
+    "@suvelocity/tester": "^1.0.2",
     "jest": "^26.1.0",
     "nock": "^12.0.3",
     "nock-puppeteer": "^1.0.2",
-    "png-js": "^1.0.0",
     "puppeteer": "^4.0.1"
   }
 }

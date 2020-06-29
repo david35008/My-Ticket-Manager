@@ -19,10 +19,18 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: cd server
-    - run: npm ci
-    - run: node_modules/.bin/jest
-    - run: cd ../client
-    - run: npm ci
-    - run: npm start & npx wait-on http://localhost:3000
-    - run: node_modules/.bin/jest
+    - name: Install Server dependencies
+      run: npm ci
+      working-directory: ./server
+    - name: Run Server Tests
+      run: USER_REPORT=${{ github.actor }} REPO_REPORT=${{ github.repository }} node_modules/.bin/jest
+      working-directory: ./server
+    - name: Install Client dependencies
+      run: npm i
+      working-directory: ./client
+    - name: Run Client
+      run: npm start & npx wait-on http://localhost:3000
+      working-directory: ./client
+    - name: Run Client Tests
+      run: USER_REPORT=${{ github.actor }} REPO_REPORT=${{ github.repository }} node_modules/.bin/jest
+      working-directory: ./client

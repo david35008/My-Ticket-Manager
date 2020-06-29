@@ -1,10 +1,18 @@
 const request = require('supertest');
 const app = require('.');
-const fs = require('fs');
 const data = require('./data.json');
-const { resolve } = require('path');
 
-describe('Tickets manager backend APIs', () => {
+const projectName = '1.Tickets manager backend';
+describe(projectName, () => {
+  beforeAll(async () => {
+    await full4s.beforeAll();
+  });
+  afterEach(async () => {
+    await full4s.afterEach(page);
+  })
+  afterAll(async () => {
+    await full4s.afterAll(projectName);
+  });
   test('Can get all tickets', async () => {
     const { body } = await request(app)
       .get('/api/tickets')

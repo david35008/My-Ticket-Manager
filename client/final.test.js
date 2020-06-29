@@ -1,19 +1,7 @@
 const puppeteer = require('puppeteer');
 const nock = require('nock');
 const useNock = require('nock-puppeteer');
-const fs = require('fs');
-const GIFEncoder = require('gifencoder');
-const PNG = require('png-js');
-
-function decode(png) {
-  return new Promise(r => {png.decode(pixels => r(pixels))});
-}
-
-async function gifAddFrame(page, encoder) {
-  const pngBuffer = await page.screenshot({ clip: { width: 1024, height: 768, x: 0, y: 0 } });
-  const png = new PNG(pngBuffer);
-  await decode(png).then(pixels => encoder.addFrame(pixels));
-}
+const full4s = require('@suvelocity/tester');
 
 const mockData = [
   {
@@ -45,32 +33,21 @@ let browser;
 let encoder;
 
 jest.setTimeout(30000);
-describe('Ticket Manager UI Tests', () => {
+const projectName = '1.Ticket Manager UI';
+describe(projectName, () => {
   beforeAll(async () => {
     browser = await puppeteer.launch();
     page = await browser.newPage();
     useNock(page, ['http://localhost:3000/api']);
 
-    if (process.env.RECORD_TEST) {
-      encoder = new GIFEncoder(1024, 768);
-      encoder.createWriteStream()
-        .pipe(fs.createWriteStream('ui-testing-recording.gif'));
-      encoder.start();
-      encoder.setRepeat(0);
-      encoder.setDelay(500);
-      encoder.setQuality(5); // default    
-    }
+    await full4s.beforeAll();
   });
   afterEach(async () => {
-    if (process.env.RECORD_TEST) {
-      await gifAddFrame(page, encoder);
-    }
+    await full4s.afterEach(page);
   })
   afterAll(async () => {
-    if (process.env.RECORD_TEST) {
-      encoder.finish();
-    }
-    await browser.close()
+    await full4s.afterAll(projectName);
+    await browser.close();
   });
 
   test('The app title should be Tickets Manager', async () => {

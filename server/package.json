@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "jest": "^26.1.0",
+    "@suvelocity/tester": "^1.0.2",
     "supertest": "^4.0.2"
   }
 }
