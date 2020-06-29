@@ -1,5 +1,5 @@
 const request = require('supertest');
-const app = require('.');
+const app = require('./app');
 const data = require('./data.json');
 
 const projectName = '1.Tickets manager backend';

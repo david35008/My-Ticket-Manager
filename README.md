@@ -37,7 +37,7 @@ On the client folder
 
 
 ## Requirements Backend
-- The app should locate in `server` folder in file named index.js use express and expose app object (`module.exports = app;`).
+The express app should locate in `server` folder in file named app.js and expose app object (`module.exports = app;`).
 - The server should run on port `8080` serve the react app on `http://localhost:8080/` and expose those APIs:
   - [GET] api/tickets - will return array of tickets from `server/data.json`. If called with [query param](https://en.wikipedia.org/wiki/Query_string) `searchText` the API will [filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) out tickets that haven't title that include the value of `searchText` - should be [case-insensitive](https://en.wikipedia.org/wiki/Case_sensitivity)
   - [POST] api/tickets/[:ticketId](https://stackoverflow.com/a/20089634/10839175)/done - will set `done` property true for the given ticketId
