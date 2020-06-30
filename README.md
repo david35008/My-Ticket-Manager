@@ -76,4 +76,4 @@ The express app should locate in `server` folder in file named app.js and expose
 ## Submitting
  - Run on windows `$env:RECORD_TEST='true'; npm run test` on mac `RECORD_TEST=true npm run test` inside the client folder, that will create gif file of your UI testing may take up to 4min, don't forget to push this generated file as well (`ui-testing-recording.gif`)
  - Create a Pull Request from the new brunch into master in your duplicated repository
- - add username: f4s-master, email: ? as collaborators to your imported repo. 
+ - add username: GuySerfaty, email: guy353@gmail.com as collaborators to your imported repo. 
