@@ -34,6 +34,12 @@
   },
   "devDependencies": {
     "@suvelocity/tester": "^1.0.2",
+    "eslint": "^7.7.0",
+    "eslint-config-airbnb": "^18.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jsx-a11y": "^6.3.1",
+    "eslint-plugin-react": "^7.20.6",
+    "eslint-plugin-react-hooks": "^4.1.0",
     "nock": "^12.0.3",
     "nock-puppeteer": "^1.0.2",
     "puppeteer": "^4.0.1"
