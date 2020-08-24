@@ -40,6 +40,12 @@ PS: feel free to add more label strings to the data (`data.json`) if you need.
 - Add a hide button with className `hideTicketButton` that will hide the tickets from view. Add a counter of number of hiding tickets, this counter should have a `hideTicketsCounter` className.
 - Add a button to restore the hidden ticket list on click with the id `restoreHideTickets` ![hide](./readme-files/hideit.gif)
 
+## Before Submitting Requirements
+- Use [ESLINT](https://eslint.org/docs/user-guide/getting-started) - run `npx eslint --init` in the backend folder & in the client.
+Use a popular style guide - Airbnb
+
+- Deploy your app with [Glitch](https://glitch.com/?utm_medium=weblink&utm_source=dev.to&utm_campaign=blog&utm_content=dev) with [this](https://dev.to/glitch/create-react-app-and-express-together-on-glitch-28gi) tutorial
+
 ## Bonus
 1. New feature - add any cool functionality you want to the app
 2. Testing that feature - add a test to that new feature
