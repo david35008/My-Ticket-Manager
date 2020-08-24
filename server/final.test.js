@@ -4,6 +4,7 @@
 const request = require('supertest');
 const full4s = require('@suvelocity/tester');
 const app = require('./app');
+const fs = require('fs').promises;
 const data = require('./data.json');
 
 const projectName = '1.Tickets manager backend';
@@ -39,7 +40,9 @@ describe(projectName, () => {
   });
 
   test('Can mark ticket as done and undone', async () => {
-    const currentState = data[0].done;
+    const myDataJSON = await fs.readFile('./data.json')
+    const myData = JSON.parse(myDataJSON);
+    const currentState = myData[0].done;
     const { body } = await request(app)
       .post(`/api/tickets/${data[0].id}/${currentState ? 'undone' : 'done'}`).query({
         searchText: 'full'
@@ -47,7 +50,8 @@ describe(projectName, () => {
       .expect(200)
 
     expect(body.updated).toBe(true);
-    const updatedData = require('./data.json');
+    const myNewData = await fs.readFile('./data.json');
+    const updatedData = JSON.parse(myNewData)
     expect(updatedData[0].done).toBe(!currentState);
 
     const { body: undoneBody } = await request(app)
@@ -57,7 +61,8 @@ describe(projectName, () => {
       .expect(200)
 
     expect(undoneBody.updated).toBe(true);
-    const updatedData2 = require('./data.json');
+    const myNewData2 = await fs.readFile('./data.json');
+    const updatedData2 = JSON.parse(myNewData2)
     expect(updatedData2[0].done).toBe(currentState);
   });
 })
