@@ -8,36 +8,40 @@ app.use(express.json());
 
 // app.use('/', express.static('../client/build'));
 
-// JSON.stringify(allTickets, null, 2)
-
 app.get('/api/tickets', async (req, res) => {
   const content = await fs.readFile('./data.json');
   const json = JSON.parse(content);
   if (req.query.searchText) {
     const filteredTickets = json
-      .filter((ticket) => ticket.title.toLowerCase().includes(req.query.searchText));
+      .filter((ticket) => ticket.title.toLowerCase().includes(req.query.searchText.toLowerCase()));
     res.send(filteredTickets);
   } else {
     res.send(json);
   }
 });
 
-// app.post('/api/records', async (req, res) => {
-//   const content = await fs.readFile(path);
-//   const json = JSON.parse(content);
-//   json.push(req.body);
-//   const message = JSON.stringify(json);
-//   await fs.writeFile(path, message);
-//   res.send(json);
-// });
+app.post('/api/tickets/:ticketId/done', async (req, res) => {
+  const content = await fs.readFile('./data.json');
+  const json = JSON.parse(content);
+  json.forEach((ticket) => {
+    if (ticket.id === req.params.ticketId) {
+      ticket.done = true;
+    }
+  });
+  await fs.writeFile('./data.json', JSON.stringify(json, null, 2));
+  res.send({ updated: true });
+});
 
-// app.delete('/api/records', async (req, res) => {
-// await fs.writeFile(path, '[{"id":"1","winnerName":"no body","date":"never","gameDuration":"0"}]');
-//   res.send('deleteed');
-// });
-
-// app.get('/', (req, res) => {
-//   res.send('hello');
-// });
+app.post('/api/tickets/:ticketId/undone', async (req, res) => {
+  const content = await fs.readFile('./data.json');
+  const json = JSON.parse(content);
+  json.forEach((ticket) => {
+    if (ticket.id === req.params.ticketId) {
+      ticket.done = false;
+    }
+  });
+  await fs.writeFile('./data.json', JSON.stringify(json, null, 2));
+  res.send({ updated: true });
+});
 
 module.exports = app;
