@@ -1,18 +1,73 @@
 #main {
     display: flex;
-    background-color: wheat;
     flex-direction: column;
     text-align: center;
     justify-content: center;
     align-content: center;
-    margin-top: 64px;
+    margin-top: 100px;
 }
 
 header {
     margin-bottom: 100px;
 }
+.ticket {
+    border: 1px solid blue;
+    border-radius: 35px;
+    margin: 20px 40px 20px 40px;
+    background-color: white;
+    padding: 10px;
+    box-shadow: 5px 10px #888888;
+    text-align: left;
+}
 
 .hiddenTicket {
-    padding-bottom: ;
     display: none;  
 }
+
+.hideTicketButton {
+    float: right;
+}
+
+.label {
+    float: right;
+    margin: 0px 0px 0px 15px;
+    box-shadow: 2px 5px #888888;
+    text-align: center;
+    border: 1px solid rgb(131, 220, 223);
+    background-color: rgb(151, 248, 252);
+    color: black;
+    border-radius: 10px;
+    min-width: 80px;
+    height: 30px;
+}
+
+.moreLess {
+    float: right;
+    margin: -15px 50px 0px 0px;
+    background-color: transparent;
+    border: none;
+    color: blue;
+    cursor: pointer;
+}
+
+.contactInfo {
+    float: left;
+    margin: 20px 0px 10px 20px;
+}
+
+#restoreHideTickets {
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+.modal {
+    top: 30%;
+    left: 30%;
+    position: absolute;
+    width: 400;
+    background-color: white;
+    border: 2px solid #000;
+    padding: (2, 4, 3);
+  }
