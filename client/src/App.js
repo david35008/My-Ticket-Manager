@@ -16,8 +16,16 @@ function App() {
     fetchFata();
   }, []);
 
+  const serchTicket = async (textvalue) => {
+    const ticketsFromServer = await axios.get(`/api/tickets?searchText=${textvalue}`)
+      .then((res) => res.data)
+      .catch((err) => console.log(err));
+    setTicketsList(ticketsFromServer);
+  };
+
   return (
     <main>
+      <input id="searchInput" onChange={(e) => serchTicket(e.target.value)} />
       {ticketsList.map((ticket, index) => {
           return (
             <Tickets
