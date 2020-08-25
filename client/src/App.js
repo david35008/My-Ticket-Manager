@@ -2,32 +2,38 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import axios from 'axios';
 import Tickets from './Tickets';
+import $ from 'jquery';
 
 function App() {
   const [ticketsList, setTicketsList] = useState([]);
   const [counter, setCounter] = useState(0)
 
   useEffect(() => {
-    const fetchFata = async () => {
-      const ticketsFromServer = await axios.get('/api/tickets')
-        .then((res) => res.data)
-        .catch((err) => console.log(err));
-      setTicketsList(ticketsFromServer);
-    };
-    fetchFata();
+  (async () => {
+      const {data} = await axios.get('/api/tickets')
+      setTicketsList(data);
+    })()
   }, []);
 
   const serchTicket = async (textvalue) => {
-    const ticketsFromServer = await axios.get(`/api/tickets?searchText=${textvalue}`)
-      .then((res) => res.data)
-      .catch((err) => console.log(err));
-    setTicketsList(ticketsFromServer);
+    const {data} = await axios.get(`/api/tickets?searchText=${textvalue}`)
+    setTicketsList(data);
+  };
+
+  const restoreHideTickets = async () => {
+      $('.hiddenTicket').removeClass().addClass('ticket');
+    setCounter(0);
   };
 
   return (
     <main>
       <input id="searchInput" onChange={(e) => serchTicket(e.target.value)} />
-  <div id='hideTicketsCounter' >{counter}</div>
+      <br/>
+      <span className='showingResaults'>showing {ticketsList.length} resaults</span>
+      {counter > 0 && 
+      <span>
+    {' ('}<span id='hideTicketsCounter'>{counter}</span> Hidden tickets - <button id="restoreHideTickets" onClick={restoreHideTickets} >restore</button> )
+  </span>}
       {ticketsList.map((ticket, index) => {
       return (
             <Tickets
