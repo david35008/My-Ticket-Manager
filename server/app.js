@@ -44,4 +44,12 @@ app.post('/api/tickets/:ticketId/undone', async (req, res) => {
   res.send({ updated: true });
 });
 
+app.post('/api/tickets/', async (req, res) => {
+  const content = await fs.readFile('./data.json');
+  const json = JSON.parse(content);
+  json.unshift(req.body);
+  await fs.writeFile('./data.json', JSON.stringify(json, null, 2));
+  res.send(json[json.length - 1]);
+});
+
 module.exports = app;

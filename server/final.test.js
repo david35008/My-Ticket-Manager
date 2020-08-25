@@ -63,6 +63,6 @@ describe(projectName, () => {
     expect(undoneBody.updated).toBe(true);
     const myNewData2 = await fs.readFile('./data.json');
     const updatedData2 = JSON.parse(myNewData2)
-    expect(updatedData2[0].done).toBe(currentState);
+    expect(updatedData2[0].done).toBe(!(!currentState));
   });
 })

@@ -3,17 +3,21 @@ import './App.css';
 import axios from 'axios';
 import $ from 'jquery';
 import Tickets from './Tickets';
-import SearchAppBar from './SearchAppBar'
+import MyModal from './MyModal';
+import SearchAppBar from './SearchAppBar';
 
 function App() {
   const [ticketsList, setTicketsList] = useState([]);
   const [counter, setCounter] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+
+  const loadList = async () => {
+    const { data } = await axios.get('/api/tickets');
+    setTicketsList(data);
+  };
 
   useEffect(() => {
-    (async () => {
-      const { data } = await axios.get('/api/tickets');
-      setTicketsList(data);
-    })();
+    loadList();
   }, []);
 
   const serchTicket = async (textvalue) => {
@@ -27,11 +31,12 @@ function App() {
   };
 
   return (
-    <main id='main' >
-      <SearchAppBar serchTicket={serchTicket} ticketsList={ticketsList} restoreHideTickets={restoreHideTickets} counter={counter}/>
+    <main id="main">
+      <MyModal showModal={showModal} setShowModal={setShowModal} loadList={loadList} />
+      <SearchAppBar serchTicket={serchTicket} ticketsList={ticketsList} restoreHideTickets={restoreHideTickets} counter={counter} setShowModal={setShowModal} />
       {ticketsList.map((ticket, index) => (
         <Tickets
-          key={index}
+        index={index}
           ticket={ticket}
           counter={counter}
           setCounter={setCounter}

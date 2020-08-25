@@ -6,6 +6,9 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
+import { Button } from '@material-ui/core';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'none',
     [theme.breakpoints.up('sm')]: {
       display: 'block',
+      marginLeft: '100px',
     },
   },
   search: {
@@ -49,7 +53,6 @@ const useStyles = makeStyles((theme) => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
@@ -62,36 +65,59 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SearchAppBar({serchTicket,ticketsList,restoreHideTickets,counter}) {
+export default function SearchAppBar({
+  serchTicket, ticketsList, restoreHideTickets, counter, setShowModal,
+}) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" >
+      <AppBar position="fixed">
         <Toolbar>
-        <span className="showingResaults">
-        showing {ticketsList.length} resaults </span> {counter > 0 &&  (
-      <span>{' ('}<span id="hideTicketsCounter">{counter}</span>
-      {' '} Hidden tickets -<button id="restoreHideTickets" onClick={restoreHideTickets}>restore</button>)
-      </span>
-      )}
+          <div className="showingResaults">
+            showing
+            {' '}
+            {ticketsList.length}
+            {' '}
+            resaults
+          </div>
+          {' '}
+          {counter > 0 && (
+          <div>
+            (
+            <span id="hideTicketsCounter">{counter}</span>
+            {' '}
+            Hidden tickets -
+            {' '}
+            <button id="restoreHideTickets" onClick={restoreHideTickets}>restore</button>
+            {' '}
+                     )
+          </div>
+          )}
           <IconButton
             edge="start"
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
-          >
-          </IconButton>
+          />
           <Typography className={classes.title} variant="h6" noWrap>
             Ticket Manager
           </Typography>
+
+          <Button color='inherit'
+            endIcon={<Fab color="primary" aria-label="add" size="small"><AddIcon /></Fab>}
+
+            onClick={() => setShowModal(true)}
+          >
+            add new item
+          </Button>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
             <InputBase
-            id="searchInput" 
-            onChange={(e) => serchTicket(e.target.value)}
+              id="searchInput"
+              onChange={(e) => serchTicket(e.target.value)}
               placeholder="Search…"
               classes={{
                 root: classes.inputRoot,
