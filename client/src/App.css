@@ -1,3 +1,18 @@
+#main {
+    display: flex;
+    background-color: wheat;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    margin-top: 64px;
+}
+
+header {
+    margin-bottom: 100px;
+}
+
 .hiddenTicket {
-    display: none;
+    padding-bottom: ;
+    display: none;  
 }
