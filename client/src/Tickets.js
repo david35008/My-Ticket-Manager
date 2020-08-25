@@ -1,10 +1,10 @@
 import React from 'react';
 
-function Tickets({ ticket }) {
+function Tickets({ ticket, setCounter, counter }) {
 
   return (
     <div className="ticket">
-      <button className="hideTicketButton">Hide</button>
+      <button className="hideTicketButton" onClick={e => {e.target.parentNode.className = 'hidden'; setCounter(counter +1)}} >Hide</button>
       <h3>{ticket.title}</h3>
       <p>{ticket.content}</p>
       <p>{ticket.userEmail}</p>

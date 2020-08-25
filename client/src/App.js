@@ -5,6 +5,7 @@ import Tickets from './Tickets';
 
 function App() {
   const [ticketsList, setTicketsList] = useState([]);
+  const [counter, setCounter] = useState(0)
 
   useEffect(() => {
     const fetchFata = async () => {
@@ -26,11 +27,14 @@ function App() {
   return (
     <main>
       <input id="searchInput" onChange={(e) => serchTicket(e.target.value)} />
+  <div id='hideTicketsCounter' >{counter}</div>
       {ticketsList.map((ticket, index) => {
-          return (
+      return (
             <Tickets
               key={index}
               ticket={ticket}
+              counter={counter}
+              setCounter={setCounter}
             />
           );
       })}
