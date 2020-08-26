@@ -21,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
     width: 400,
     backgroundColor: theme.palette.background.paper,
     border: '2px solid #000',
-    boxShadow: theme.shadows[5],
+    boxShadow: theme.shadows[50],
+    borderRadius: '15px',
     padding: theme.spacing(2, 4, 3),
   },
 }));
@@ -33,7 +34,6 @@ export default function MyModal({ showModal, setShowModal, loadList }) {
   const [labels, setLabels] = useState([]);
 
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = React.useState(getModalStyle);
 
   const handleSubmit = async (e) => {
@@ -46,7 +46,7 @@ export default function MyModal({ showModal, setShowModal, loadList }) {
       creationTime: new Date().setHours(new Date().getHours() + 3),
       labels,
     };
-    const { data } = await axios.post('/api/tickets/', newTicket);
+    await axios.post('/api/tickets/', newTicket);
     loadList();
     setShowModal(false);
   };
@@ -62,18 +62,17 @@ export default function MyModal({ showModal, setShowModal, loadList }) {
         Enter all the required fields, and press submit.
       </p>
       <form onSubmit={handleSubmit}>
-        <TextField required label="enter your title" onChange={(e) => setTitle(e.target.value)} style={{ width: 400 }} multiline />
-        <TextField required label="enter your content" onChange={(e) => setContent(e.target.value)} style={{ width: 400 }} multiline />
-        <TextField required label="enter your userEmail " onChange={(e) => setEmail(e.target.value)} style={{ width: 400 }} multiline />
+        <TextField required label="Enter your title" onChange={(e) => setTitle(e.target.value)} style={{ width: 400 }} multiline />
+        <TextField required label="Enter your content" onChange={(e) => setContent(e.target.value)} style={{ width: 400 }} multiline />
+        <TextField required label="Enter your userEmail " onChange={(e) => setEmail(e.target.value)} style={{ width: 400 }} multiline />
         <TextField
           style={{ width: 400 }}
           label="Enter Labels"
           placeholder="label,label,label"
           onChange={(e) => setLabels((e.target.value).split(','))}
         />
-
         <br />
-        <Button variant="outlined" color="primary" type="submit" size="large">Submit</Button>
+        <Button id='submitNewTicket' variant="contained" color="primary" type="submit" size="large">Submit</Button>
       </form>
     </div>
   );

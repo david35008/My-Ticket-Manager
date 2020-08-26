@@ -36,10 +36,11 @@ function App() {
       <SearchAppBar serchTicket={serchTicket} ticketsList={ticketsList} restoreHideTickets={restoreHideTickets} counter={counter} setShowModal={setShowModal} />
       {ticketsList.map((ticket, index) => (
         <Tickets
-        index={index}
+          index={index}
           ticket={ticket}
           counter={counter}
           setCounter={setCounter}
+          loadList={loadList}
         />
       ))}
     </main>

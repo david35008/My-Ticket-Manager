@@ -6,8 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import { fade, makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
-import { Button } from '@material-ui/core';
-import Fab from '@material-ui/core/Fab';
+import { Button, Tooltip } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
 const useStyles = makeStyles((theme) => ({
@@ -83,16 +82,18 @@ export default function SearchAppBar({
           </div>
           {' '}
           {counter > 0 && (
-          <div>
-            (
-            <span id="hideTicketsCounter">{counter}</span>
-            {' '}
+            <div>
+              (
+              <span id="hideTicketsCounter">{counter}</span>
+              {' '}
             Hidden tickets -
-            {' '}
-            <button id="restoreHideTickets" onClick={restoreHideTickets}>restore</button>
-            {' '}
+              {' '}
+              <Tooltip placement="buttom" title="Restore all the hidden tickets">
+                <button id="restoreHideTickets" onClick={restoreHideTickets}>restore</button>
+              </Tooltip>
+              {' '}
                      )
-          </div>
+            </div>
           )}
           <IconButton
             edge="start"
@@ -104,12 +105,11 @@ export default function SearchAppBar({
             Ticket Manager
           </Typography>
 
-          <Button color='inherit'
-            endIcon={<Fab color="primary" aria-label="add" size="small"><AddIcon /></Fab>}
-
+          <Button color='inherit' className='AddNewTicket'
+            endIcon={<AddIcon />}
             onClick={() => setShowModal(true)}
           >
-            add new item
+            Add new ticket
           </Button>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
