@@ -3,6 +3,7 @@ import { Tooltip } from '@material-ui/core';
 
 function ReadMore({ content, maxChar }) {
   const [isSliced, setIsSliced] = useState(true);
+
   useEffect(() => {
     if (content.length <= maxChar) {
       setIsSliced(false);

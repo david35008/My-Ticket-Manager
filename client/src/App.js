@@ -11,6 +11,7 @@ function App() {
   const [counter, setCounter] = useState(0);
   const [showModal, setShowModal] = useState(false);
 
+  // load the tickets list from server
   const loadList = async () => {
     const { data } = await axios.get('/api/tickets');
     setTicketsList(data);
@@ -20,11 +21,13 @@ function App() {
     loadList();
   }, []);
 
+  // send request of search to server and update the tickets list
   const serchTicket = async (textvalue) => {
     const { data } = await axios.get(`/api/tickets?searchText=${textvalue}`);
     setTicketsList(data);
   };
 
+  // restore all hidden tickets
   const restoreHideTickets = async () => {
     $('.hiddenTicket').removeClass().addClass('ticket');
     setCounter(0);

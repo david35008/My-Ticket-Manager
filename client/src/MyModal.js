@@ -13,8 +13,9 @@ function getModalStyle() {
     left: `${left}%`,
     transform: `translate(-${top}%, -${left}%)`,
   };
-}
+};
 
+// create style
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: 'absolute',
@@ -36,6 +37,7 @@ export default function MyModal({ showModal, setShowModal, loadList }) {
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
 
+  // sending new ticket to server
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newTicket = {

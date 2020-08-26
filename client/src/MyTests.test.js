@@ -9,7 +9,9 @@ describe(projectName, () => {
         browser = await puppeteer.launch();
         page = await browser.newPage();
     })
-
+    afterAll(async () => {
+        await browser.close();
+      });
     test('tests if the add new ticket add a ticket to the data.jason (Work on server running!)', async () => {
         const data = await fs.readFile('../server/data.json')
         const Json = JSON.parse(data);
@@ -47,33 +49,21 @@ describe(projectName, () => {
         await page.waitForSelector('.checkButton', { visible: true });
         let openDoneButton = await page.$('.checkButton');
         await openDoneButton.click();
-
         setTimeout(async() => {
             const data1 = await fs.readFile('../server/data.json')
             const Json1 = JSON.parse(data1);
             const updatedState = Json1[0].done;
             expect(updatedState === !currentState).toBe(true);
-
-            
             await page.goto('http://localhost:3000/');
             await page.waitForSelector('.checkButton', { visible: true });
             openDoneButton = await page.$('.checkButton');
             await openDoneButton.click();
-            
             setTimeout(async () => {
-                
             const data2 = await fs.readFile('../server/data.json')
             const Json2 = JSON.parse(data2);
             const updatedState2 = Json2[0].done;
-            
-            
             expect(updatedState2 === currentState).toBe(true);
         }, 2000);
         }, 2000);
-
-
-
-    }, 25000)
-
-
+    })
 })

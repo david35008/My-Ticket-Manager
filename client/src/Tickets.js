@@ -9,6 +9,8 @@ import ReadMore from './ReadMore';
 function Tickets({
   ticket, setCounter, counter, loadList,
 }) {
+
+  // sending request to server to change done property
   const changeDoneProperty = async () => {
     ticket.done
       ? await axios.post(`/api/tickets/${ticket.id}/undone`)

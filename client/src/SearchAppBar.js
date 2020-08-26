@@ -73,12 +73,12 @@ export default function SearchAppBar({
     <div className={classes.root}>
       <AppBar position="fixed">
         <Toolbar>
-          <div className="showingResaults">
+          <div className="showingResults">
             showing
             {' '}
             {ticketsList.length}
             {' '}
-            resaults
+            results
           </div>
           {' '}
           {counter > 0 && (
