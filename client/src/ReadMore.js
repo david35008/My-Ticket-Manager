@@ -30,12 +30,11 @@ function ReadMore({ content, maxChar }) {
               {text}
             </p>
             {!(content.length <= maxChar)
-              &&
-              <Tooltip placement="top" title="Show less content">
-                <button className="moreLess" onClick={() => setIsSliced(!isSliced)}>See less...</button>
-              </Tooltip>
-
-            }
+              && (
+                <Tooltip placement="top" title="Show less content">
+                  <button className="moreLess" onClick={() => setIsSliced(!isSliced)}>See less...</button>
+                </Tooltip>
+              )}
           </div>
         )}
     </>

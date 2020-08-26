@@ -86,13 +86,13 @@ export default function SearchAppBar({
               (
               <span id="hideTicketsCounter">{counter}</span>
               {' '}
-            Hidden tickets -
+              Hidden tickets -
               {' '}
               <Tooltip placement="buttom" title="Restore all the hidden tickets">
                 <button id="restoreHideTickets" onClick={restoreHideTickets}>restore</button>
               </Tooltip>
               {' '}
-                     )
+              )
             </div>
           )}
           <IconButton
@@ -105,7 +105,10 @@ export default function SearchAppBar({
             Ticket Manager
           </Typography>
 
-          <Button color='inherit' className='AddNewTicket'
+          <Button
+          id='modalButton'
+            color="inherit"
+            className="AddNewTicket"
             endIcon={<AddIcon />}
             onClick={() => setShowModal(true)}
           >

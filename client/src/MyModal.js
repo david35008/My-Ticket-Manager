@@ -62,17 +62,18 @@ export default function MyModal({ showModal, setShowModal, loadList }) {
         Enter all the required fields, and press submit.
       </p>
       <form onSubmit={handleSubmit}>
-        <TextField required label="Enter your title" onChange={(e) => setTitle(e.target.value)} style={{ width: 400 }} multiline />
-        <TextField required label="Enter your content" onChange={(e) => setContent(e.target.value)} style={{ width: 400 }} multiline />
-        <TextField required label="Enter your userEmail " onChange={(e) => setEmail(e.target.value)} style={{ width: 400 }} multiline />
+        <TextField id='titleInput' required label="Enter your title" onChange={(e) => setTitle(e.target.value)} style={{ width: 400 }} multiline />
+        <TextField id='contentInput' required label="Enter your content" onChange={(e) => setContent(e.target.value)} style={{ width: 400 }} multiline />
+        <TextField id='emailInput' required label="Enter your userEmail " onChange={(e) => setEmail(e.target.value)} style={{ width: 400 }} multiline />
         <TextField
+        id='labelsInput'
           style={{ width: 400 }}
           label="Enter Labels"
           placeholder="label,label,label"
           onChange={(e) => setLabels((e.target.value).split(','))}
         />
         <br />
-        <Button id='submitNewTicket' variant="contained" color="primary" type="submit" size="large">Submit</Button>
+        <Button id="submitNewTicket" variant="contained" color="primary" type="submit" size="large">Submit</Button>
       </form>
     </div>
   );
