@@ -1,20 +1,97 @@
 const puppeteer = require('puppeteer');
-const fs = require('fs').promises;
+const nock = require('nock');
+const useNock = require('nock-puppeteer');
+
+
+const mockData = [
+    {
+        id: 'dd63145f-6340-5fa7-8619-2f44dbf63fd7',
+        title: 'help me',
+        content: 'pls i have been trying to run code on a dynamic page but it is not working, i need help pls. thanks',
+        userEmail: 'rotif@suob.sh',
+        creationTime: 1514809791415,
+        labels: ['Corvid', 'Api'],
+    },
+];
+const updatedData = [
+    {
+        id: 'dd63145f-6340-5fa7-8619-2f44dbf63fd7',
+        title: 'help me',
+        content: 'pls i have been trying to run code on a dynamic page but it is not working, i need help pls. thanks',
+        userEmail: 'rotif@suob.sh',
+        creationTime: 1514809791415,
+        labels: ['Corvid', 'Api'],
+    },
+    {
+        id: 'Test title',
+        title: 'Test title',
+        content: 'Test content',
+        userEmail: 'Test@email.com',
+        creationTime: 1514809791415,
+        labels: ['Test1', 'Test2'],
+    },
+];
+
 
 let page;
 let browser;
 const projectName = '1.Ticket Manager My Test';
 describe(projectName, () => {
     beforeAll(async () => {
-        browser = await puppeteer.launch();
+        browser = await puppeteer.launch(
+            // {
+            //     headless: false,
+            //     slowMo: 100
+            // }
+        );
         page = await browser.newPage();
+        useNock(page, ['http://localhost:3000/api']);
     })
     afterAll(async () => {
         await browser.close();
-      });
-    test('tests if the add new ticket add a ticket to the data.jason (Work on server running!)', async () => {
-        const data = await fs.readFile('../server/data.json')
-        const Json = JSON.parse(data);
+    });
+
+    test('tests if the done/undone buttons marke right', async () => {
+        const getAllTicketsMock = await nock('http://localhost:3000/', { allowUnmocked: true })
+            .get('/api/tickets')
+            .query(() => true)
+            .reply(200, mockData);
+
+
+        const getDoneButtonReply = await nock('http://localhost:3000/', { allowUnmocked: true })
+            .post('/api/tickets/dd63145f-6340-5fa7-8619-2f44dbf63fd7/done')
+            .reply(200, { updated: true });
+
+        await page.goto('http://localhost:3000/');
+        await page.waitForSelector('.checkButton', { visible: true });
+        let openDoneButton = await page.$('.checkButton');
+        const firstDoneButtonValue = (await openDoneButton.getProperty('innerHTML'))._remoteObject.value;
+        
+        mockData[0].done = true;
+        await openDoneButton.click();
+        await timeout(2000);
+        await page.$$('.ticket');
+        await timeout(2000);
+
+        const updatedButton = await page.$('.checkButton');
+        const secondDoneButtonValue = (await updatedButton.getProperty('innerHTML'))._remoteObject.value;
+
+        
+        expect(secondDoneButtonValue).toBe(firstDoneButtonValue);
+    }, 30000)
+
+
+    test('tests if the add new ticket add a ticket to the data.jason', async () => {
+
+        await nock('http://localhost:3000/', { allowUnmocked: true })
+            .get('/api/tickets')
+            .query(() => true)
+            .reply(200, mockData);
+
+        await nock('http://localhost:3000/', { allowUnmocked: true })
+            .post('/api/tickets/')
+            .reply(200, updatedData);
+
         await page.goto('http://localhost:3000/');
         await page.waitForSelector('#modalButton', { visible: true });
         const openmodalButton = await page.$('#modalButton');
@@ -26,44 +103,21 @@ describe(projectName, () => {
         await page.type('#labelsInput', 'Test1,Test2');
         const submitBtn = await page.$('#submitNewTicket');
         await submitBtn.click();
+        await timeout(2000);
 
-        setTimeout(async () => {
-            const updatedData = await fs.readFile('../server/data.json')
-            const parsedUpdatedData = JSON.parse(updatedData);
-            const firstItem = parsedUpdatedData[0];
+        const afterAddingElements = await page.$$('.ticket');
+        expect(afterAddingElements.length).toBe(2);
+        
 
-            expect(parsedUpdatedData.length).toBe(Json.length + 1);
-            expect(firstItem.title).toBe('Test title');
-            expect(firstItem.content).toBe('Test content');
-            expect(firstItem.userEmail).toBe('Test@email.com');
-            expect(firstItem.labels[0]).toBe('Test1');
-            expect(firstItem.labels[1]).toBe('Test2');
-        }, 2000);
+        // expect(firstItem.title).toBe('Test title');
+        // expect(firstItem.content).toBe('Test content');
+        // expect(firstItem.userEmail).toBe('Test@email.com');
+        // expect(firstItem.labels[0]).toBe('Test1');
+        // expect(firstItem.labels[1]).toBe('Test2');
+
     }, 25000)
-
-    test('tests if the done/undone buttons marke right (Work on server running!)', async () => {
-        const data = await fs.readFile('../server/data.json');
-        const Json = JSON.parse(data);
-        const currentState = Json[0].done;
-        await page.goto('http://localhost:3000/');
-        await page.waitForSelector('.checkButton', { visible: true });
-        let openDoneButton = await page.$('.checkButton');
-        await openDoneButton.click();
-        setTimeout(async() => {
-            const data1 = await fs.readFile('../server/data.json')
-            const Json1 = JSON.parse(data1);
-            const updatedState = Json1[0].done;
-            expect(updatedState === !currentState).toBe(true);
-            await page.goto('http://localhost:3000/');
-            await page.waitForSelector('.checkButton', { visible: true });
-            openDoneButton = await page.$('.checkButton');
-            await openDoneButton.click();
-            setTimeout(async () => {
-            const data2 = await fs.readFile('../server/data.json')
-            const Json2 = JSON.parse(data2);
-            const updatedState2 = Json2[0].done;
-            expect(updatedState2 === currentState).toBe(true);
-        }, 2000);
-        }, 2000);
-    })
 })
+
+function timeout(ms) {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+}

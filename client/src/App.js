@@ -35,7 +35,7 @@ function App() {
 
   return (
     <main id="main">
-      <MyModal showModal={showModal} setShowModal={setShowModal} loadList={loadList} />
+      <MyModal showModal={showModal} setShowModal={setShowModal} loadList={loadList} setTicketsList={setTicketsList}/>
       <SearchAppBar serchTicket={serchTicket} ticketsList={ticketsList} restoreHideTickets={restoreHideTickets} counter={counter} setShowModal={setShowModal} />
       {ticketsList.map((ticket, index) => (
         <Tickets

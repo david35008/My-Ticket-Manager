@@ -3,6 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Modal, Button, TextField } from '@material-ui/core';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
+import { data } from 'jquery';
 
 function getModalStyle() {
   const top = 50;
@@ -28,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MyModal({ showModal, setShowModal, loadList }) {
+export default function MyModal({ showModal, setShowModal, loadList, setTicketsList }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [userEmail, setEmail] = useState('');
@@ -48,9 +49,9 @@ export default function MyModal({ showModal, setShowModal, loadList }) {
       creationTime: new Date().setHours(new Date().getHours() + 3),
       labels,
     };
-    await axios.post('/api/tickets/', newTicket);
-    loadList();
-    setShowModal(false);
+    const {data} =  await axios.post('/api/tickets/', newTicket);
+    setTicketsList(data);
+    handleClose();
   };
 
   const handleClose = () => {

@@ -49,7 +49,7 @@ app.post('/api/tickets/', async (req, res) => {
   const json = JSON.parse(content);
   json.unshift(req.body);
   await fs.writeFile('./data.json', JSON.stringify(json, null, 2));
-  res.send(json[json.length - 1]);
+  res.send(json);
 });
 
 module.exports = app;
