@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SearchAppBar({
-  serchTicket, ticketsList, restoreHideTickets, counter, setShowModal,
+  serchTicket, ticketsList, restoreHideTickets, inputRef, setShowModal,listForMap
 }) {
   const classes = useStyles();
 
@@ -81,10 +81,10 @@ export default function SearchAppBar({
             results
           </div>
           {' '}
-          {counter > 0 && (
+          {ticketsList.length - listForMap.length > 0 && (
             <div>
               (
-              <span id="hideTicketsCounter">{counter}</span>
+              <span id="hideTicketsCounter">{ticketsList.length - listForMap.length}</span>
               {' '}
               Hidden tickets -
               {' '}
@@ -120,6 +120,7 @@ export default function SearchAppBar({
             </div>
             <InputBase
               id="searchInput"
+              ref={inputRef}
               onChange={(e) => serchTicket(e.target.value)}
               placeholder="Search…"
               classes={{

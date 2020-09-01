@@ -1,5 +1,5 @@
 const express = require('express');
-const fs = require('fs').promises;
+const fs = require('fs')
 
 const app = express();
 
@@ -9,7 +9,7 @@ app.use(express.json());
 app.use('/', express.static('../client/build'));
 
 app.get('/api/tickets', async (req, res) => {
-  const content = await fs.readFile('./data.json');
+  const content = fs.readFileSync('./data.json');
   const json = JSON.parse(content);
   if (req.query.searchText) {
     const filteredTickets = json
@@ -21,34 +21,34 @@ app.get('/api/tickets', async (req, res) => {
 });
 
 app.post('/api/tickets/:ticketId/done', async (req, res) => {
-  const content = await fs.readFile('./data.json');
+  const content = fs.readFileSync('./data.json');
   const json = JSON.parse(content);
   json.forEach((ticket) => {
     if (ticket.id === req.params.ticketId) {
       ticket.done = true;
     }
   });
-  await fs.writeFile('./data.json', JSON.stringify(json, null, 2));
+  fs.writeFileSync('./data.json', JSON.stringify(json, null, 2));
   res.send({ updated: true });
 });
 
 app.post('/api/tickets/:ticketId/undone', async (req, res) => {
-  const content = await fs.readFile('./data.json');
+  const content = fs.readFileSync('./data.json');
   const json = JSON.parse(content);
   json.forEach((ticket) => {
     if (ticket.id === req.params.ticketId) {
       ticket.done = false;
     }
   });
-  await fs.writeFile('./data.json', JSON.stringify(json, null, 2));
+  fs.writeFileSync('./data.json', JSON.stringify(json, null, 2));
   res.send({ updated: true });
 });
 
 app.post('/api/tickets/', async (req, res) => {
-  const content = await fs.readFile('./data.json');
+  const content = fs.readFileSync('./data.json');
   const json = JSON.parse(content);
   json.unshift(req.body);
-  await fs.writeFile('./data.json', JSON.stringify(json, null, 2));
+  fs.writeFileSync('./data.json', JSON.stringify(json, null, 2));
   res.send(json);
 });
 

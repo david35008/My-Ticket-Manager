@@ -3,7 +3,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Modal, Button, TextField } from '@material-ui/core';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
-import { data } from 'jquery';
 
 function getModalStyle() {
   const top = 50;
@@ -29,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MyModal({ showModal, setShowModal, loadList, setTicketsList }) {
+export default function MyModal({ showModal, setShowModal, loadList, setTicketsList,inputRef }) {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [userEmail, setEmail] = useState('');
@@ -40,6 +39,7 @@ export default function MyModal({ showModal, setShowModal, loadList, setTicketsL
 
   // sending new ticket to server
   const handleSubmit = async (e) => {
+    inputRef.current.firstChild.value = ''
     e.preventDefault();
     const newTicket = {
       id: uuidv4(),
@@ -50,7 +50,7 @@ export default function MyModal({ showModal, setShowModal, loadList, setTicketsL
       labels,
     };
     const {data} =  await axios.post('/api/tickets/', newTicket);
-    setTicketsList(data);
+    loadList();
     handleClose();
   };
 
