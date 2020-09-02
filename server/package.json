@@ -9,7 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "uuid": "^8.3.0"
   },
   "devDependencies": {
     "@suvelocity/tester": "^1.0.2",

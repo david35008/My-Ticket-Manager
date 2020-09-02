@@ -7,47 +7,48 @@ import SearchAppBar from './SearchAppBar';
 
 function App() {
   const [ticketsList, setTicketsList] = useState([]);
-  const [idList, setIdList] = useState([]);
+  const [idListHiddenTickets, setIdListHiddenTickets] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
-  const inputRef = useRef();
-
-  const listForMap =ticketsList.filter(ticket => !ticket.hidden);
-  
-  // load the tickets list from server
-  const loadList = async () => {
-    try {
-    const { data } = await axios.get('/api/tickets');
-    
-    setTicketsList(data.map(ticket => {
-      if (idList.some(id => ticket.id === id)) {
-        ticket.hidden = true;
-      }
-      return ticket;
-    }))
-  } catch(e){ 
-    e.response.status?
-    console.log("server not response")
-    : console.log("bad response from server");
-  }
-  
-  };
 
   useEffect(() => {
     loadList();
   }, []);
 
-  // send request of search to server and update the tickets list
-  const serchTicket = async (textvalue) => {
-    const { data } = await axios.get(`/api/tickets?searchText=${textvalue}`);
+  const inputRef = useRef();
+
+  const listForMap = ticketsList.filter(ticket => !ticket.hidden);
+
+  // update which ticket is hidden
+  const filterHiddenTickets = (data) => {
     setTicketsList(data.map(ticket => {
-      if (idList.some(id => ticket.id === id)) {
+      if (idListHiddenTickets.some(id => ticket.id === id)) {
         ticket.hidden = true;
       }
       return ticket;
     }));
+  }
+
+  // load the tickets list from server
+  const loadList = async () => {
+    try {
+      const { data } = await axios.get('/api/tickets');
+      filterHiddenTickets(data)
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
+  // send request of search to server and update the tickets list
+  const serchTicket = async (textvalue) => {
+    try {
+      const { data } = await axios.get(`/api/tickets?searchText=${textvalue}`);
+      filterHiddenTickets(data)
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  // hide ticket from the list
   const handleHideTicket = (id) => {
     const cloneList = ticketsList.map(ticket => {
       if (ticket.id === id) {
@@ -56,12 +57,12 @@ function App() {
       return ticket;
     })
     setTicketsList(cloneList)
-    setIdList(idList.concat([id]))
+    setIdListHiddenTickets(idListHiddenTickets.concat([id]))
   }
 
   // restore all hidden tickets
-  const restoreHideTickets =  () => {
-    let idCloneList = idList.slice();
+  const restoreHideTickets = () => {
+    let idCloneList = idListHiddenTickets.slice();
     setTicketsList(ticketsList.map(ticket => {
       if (ticket.hidden) {
         ticket.hidden = false;
@@ -69,37 +70,37 @@ function App() {
       }
       return ticket;
     }))
-    setIdList(idCloneList);
+    setIdListHiddenTickets(idCloneList);
   };
 
-  // sending request to server to change done property
+  // sending request to server for change done property
   const changeDoneProperty = async (ticket) => {
-    ticket.done
-      ? await axios.post(`/api/tickets/${ticket.id}/undone`)
-      : await axios.post(`/api/tickets/${ticket.id}/done`);
-    loadList();
+    try {
+      ticket.done
+        ? await axios.post(`/api/tickets/${ticket.id}/undone`)
+        : await axios.post(`/api/tickets/${ticket.id}/done`);
+      loadList();
+    } catch (error) {
+      console.error(error.message);
+    }
   };
-
-
 
   return (
     <main id="main">
-      <MyModal showModal={showModal} inputRef={inputRef} setShowModal={setShowModal} loadList={loadList} setTicketsList={setTicketsList} />
-      <SearchAppBar serchTicket={serchTicket} inputRef={inputRef} ticketsList={ticketsList} listForMap={listForMap} restoreHideTickets={restoreHideTickets} setShowModal={setShowModal} />
+      <MyModal showModal={showModal} setShowModal={setShowModal} loadList={loadList} inputRef={inputRef} />
+      <SearchAppBar serchTicket={serchTicket} ticketsList={ticketsList} restoreHideTickets={restoreHideTickets} inputRef={inputRef} setShowModal={setShowModal} listForMap={listForMap} />
       {listForMap.length > 0 ?
-      listForMap.map((ticket, index) => (
-        <Tickets
-          index={index}
-          ticket={ticket}
-          loadList={loadList}
-          handleHideTicket={handleHideTicket}
-          changeDoneProperty={changeDoneProperty}
-        />
-      ))
-    :<h1>There is no tickets for show</h1>
-    }
+        listForMap.map((ticket, index) => (
+          <Tickets
+            key={ticket.id}
+            ticket={ticket}
+            handleHideTicket={handleHideTicket}
+            changeDoneProperty={changeDoneProperty}
+          />
+        ))
+        : <h1>There is no tickets for show</h1>
+      }
     </main>
   );
 }
-
 export default App;

@@ -26,10 +26,10 @@ function Tickets({ ticket, handleHideTicket, changeDoneProperty }) {
       <h3>{ticket.title}</h3>
       <ReadMore content={ticket.content} maxChar="300" />
       <p className="contactInfo">
-        {ticket.userEmail}
+        {ticket.userEmail} {}
         {new Date(ticket.creationTime).toString()}
       </p>
-      {ticket.labels && ticket.labels.map((label) => (<div className="label"><Chip className={{ root: 'label' }} label={label} color="primary" /></div>))}
+      {ticket.labels && ticket.labels.map((label, index) => (<div key={label} className="label"><Chip label={label} color="primary" /></div>))}
     </div>
   );
 }

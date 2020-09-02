@@ -1,5 +1,6 @@
 const express = require('express');
 const fs = require('fs')
+const { v4: uuidv4 } = require('uuid');
 
 const app = express();
 
@@ -8,7 +9,7 @@ app.use(express.json());
 
 app.use('/', express.static('../client/build'));
 
-app.get('/api/tickets', async (req, res) => {
+app.get('/api/tickets', (req, res) => {
   const content = fs.readFileSync('./data.json');
   const json = JSON.parse(content);
   if (req.query.searchText) {
@@ -20,36 +21,45 @@ app.get('/api/tickets', async (req, res) => {
   }
 });
 
-app.post('/api/tickets/:ticketId/done', async (req, res) => {
+app.post('/api/tickets/:ticketId/:done', (req, res) => {
   const content = fs.readFileSync('./data.json');
-  const json = JSON.parse(content);
-  json.forEach((ticket) => {
-    if (ticket.id === req.params.ticketId) {
-      ticket.done = true;
-    }
-  });
-  fs.writeFileSync('./data.json', JSON.stringify(json, null, 2));
-  res.send({ updated: true });
-});
+  let json = JSON.parse(content);
+  let updated = false;
+  const done = req.params.done === "done"
+  try {
+    json.forEach((ticket) => {
+      if (ticket.id === req.params.ticketId) {
+        if (ticket.done !== done) {
+          ticket.done = done;
+          updated = true;
+        }
+      }
+    });
+    fs.writeFileSync('./data.json', JSON.stringify(json, null, 2));
+    res.send({ updated });
+  } catch (e) { res.send({ updated }) }
+})
 
-app.post('/api/tickets/:ticketId/undone', async (req, res) => {
-  const content = fs.readFileSync('./data.json');
-  const json = JSON.parse(content);
-  json.forEach((ticket) => {
-    if (ticket.id === req.params.ticketId) {
-      ticket.done = false;
+app.post('/api/tickets/', (req, res) => {
+  const ticket = req.body
+  if (typeof (ticket.title) === "string" && typeof (ticket.content) === "string" && typeof (ticket.userEmail) === "string" && typeof (ticket.creationTime) == "number") {
+    const content = fs.readFileSync('./data.json');
+    const json = JSON.parse(content);
+    const newTicket = {
+      id: uuidv4(),
+      title: ticket.title,
+      content: ticket.content,
+      userEmail: ticket.userEmail,
+      creationTime: ticket.creationTime
     }
-  });
-  fs.writeFileSync('./data.json', JSON.stringify(json, null, 2));
-  res.send({ updated: true });
-});
-
-app.post('/api/tickets/', async (req, res) => {
-  const content = fs.readFileSync('./data.json');
-  const json = JSON.parse(content);
-  json.unshift(req.body);
-  fs.writeFileSync('./data.json', JSON.stringify(json, null, 2));
-  res.send(json);
+    let labelsArg = ticket.labels
+    labelsArg && labelsArg.length && labelsArg[0].length && (newTicket.labels = labelsArg);
+    json.unshift(newTicket);
+    fs.writeFileSync('./data.json', JSON.stringify(json, null, 2));
+    res.send(json);
+  } else {
+    res.status(400).send("Request data isn't good");
+  }
 });
 
 module.exports = app;
