@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooltip, Button } from '@material-ui/core';
+import {  Tooltip, Button } from '@material-ui/core';
 import Chip from '@material-ui/core/Chip';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import HighlightOffIcon from '@material-ui/icons/HighlightOff';
@@ -9,17 +9,18 @@ function Tickets({ ticket, handleHideTicket, changeDoneProperty }) {
 
   return (
     <div className="ticket">
-      <Tooltip placement="top" title="Hide the ticket">
-        <Button color="secondary" className="hideTicketButton" onClick={() => handleHideTicket(ticket.id)}>Hide</Button>
+      <Tooltip placement="top-start" title="Hide the ticket" >
+              <Button color="secondary" className="hideTicketButton" onClick={() => handleHideTicket(ticket.id)} >Hide</Button>
       </Tooltip>
+     
       {ticket.done
         ? (
-          <Tooltip placement="top" title="Press to marke as not done">
+          <Tooltip placement="top-start" title="Press to marke as not done" >
             <CheckCircleIcon className="checkButton" style={{ color: 'green' }} onClick={() => changeDoneProperty(ticket)} />
           </Tooltip>
         )
         : (
-          <Tooltip placement="top" title="Press to marke as done">
+          <Tooltip placement="top-start" title="Press to marke as done" >
             <HighlightOffIcon className="checkButton" style={{ color: 'red', cursor: 'pointer !important' }} onClick={() => changeDoneProperty(ticket)} />
           </Tooltip>
         )}

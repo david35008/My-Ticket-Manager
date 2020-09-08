@@ -9,15 +9,23 @@ function App() {
   const [ticketsList, setTicketsList] = useState([]);
   const [idListHiddenTickets, setIdListHiddenTickets] = useState([]);
   const [showModal, setShowModal] = useState(false);
-
+  // debugger
+  // console.log("render app")
   useEffect(() => {
-    loadList();
-  }, []);
+    (async () =>{
+    try {
+      const { data } = await axios.get('/api/tickets');
+      setTicketsList(data)
+    } catch (error) {
+      console.error(error.message);
+    }
+  })();
+  // console.log("effect")
+}, []);
 
   const inputRef = useRef();
 
   const listForMap = ticketsList.filter(ticket => !ticket.hidden);
-
   // update which ticket is hidden
   const filterHiddenTickets = (data) => {
     setTicketsList(data.map(ticket => {
@@ -87,7 +95,7 @@ function App() {
 
   return (
     <main id="main">
-      <MyModal showModal={showModal} setShowModal={setShowModal} loadList={loadList} inputRef={inputRef} />
+     <MyModal showModal={showModal} setShowModal={setShowModal} loadList={loadList} inputRef={inputRef} />
       <SearchAppBar serchTicket={serchTicket} ticketsList={ticketsList} restoreHideTickets={restoreHideTickets} inputRef={inputRef} setShowModal={setShowModal} listForMap={listForMap} />
       {listForMap.length > 0 ?
         listForMap.map((ticket, index) => (

@@ -1,14 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Tooltip } from '@material-ui/core';
 
 function ReadMore({ content, maxChar }) {
-  const [isSliced, setIsSliced] = useState(true);
+  const [isSliced, setIsSliced] = useState(content.length <= maxChar ? false : true);
 
-  useEffect(() => {
-    if (content.length <= maxChar) {
-      setIsSliced(false);
-    }
-  }, []);
   const text = isSliced ? content.slice(0, maxChar) : content;
 
   return (
@@ -20,7 +15,7 @@ function ReadMore({ content, maxChar }) {
               {text}
               <span>...</span>
             </p>
-            <Tooltip placement="top" title="Show all the content">
+            <Tooltip placement="top-start" title="Show all the content">
               <button className="moreLess" onClick={() => setIsSliced(!isSliced)}>See more...</button>
             </Tooltip>
           </div>
@@ -32,7 +27,7 @@ function ReadMore({ content, maxChar }) {
             </p>
             {!(content.length <= maxChar)
               && (
-                <Tooltip placement="top" title="Show less content">
+                <Tooltip placement="top-start" title="Show less content">
                   <button className="moreLess" onClick={() => setIsSliced(!isSliced)}>See less...</button>
                 </Tooltip>
               )}

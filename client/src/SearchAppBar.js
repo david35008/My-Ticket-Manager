@@ -88,7 +88,7 @@ export default function SearchAppBar({
               {' '}
               Hidden tickets -
               {' '}
-              <Tooltip placement="buttom" title="Restore all the hidden tickets">
+              <Tooltip placement="bottom-start" title="Restore all the hidden tickets">
                 <button id="restoreHideTickets" onClick={restoreHideTickets}>restore</button>
               </Tooltip>
               {' '}
