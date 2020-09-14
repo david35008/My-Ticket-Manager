@@ -38,7 +38,7 @@ export default function MyModal({ showModal, setShowModal, loadList, inputRef })
       content,
       userEmail,
       creationTime: Number(new Date()),
-      labels,
+      labels: [...new Set(labels)],
     };
     try {
       await axios.post('/api/tickets/', newTicket);
